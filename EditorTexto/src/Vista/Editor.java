@@ -120,7 +120,7 @@ public class Editor extends javax.swing.JFrame {
         btnUltimaPagina.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
 
         btnGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Vista/Iconos/icon-guardar.png"))); // NOI18N
-        btnGuardar.setText("<html> Guardar actual");
+        btnGuardar.setText("Guardar");
         btnGuardar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnGuardar.setMargin(new java.awt.Insets(2, 2, 2, 2));
         btnGuardar.setMinimumSize(new java.awt.Dimension(59, 37));

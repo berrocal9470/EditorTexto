@@ -13,12 +13,12 @@ import java.util.Base64;
  *
  * @author Berrocal
  */
-public class GestorAES implements IEncriptable {
+public class AdapterAES implements IEncriptable {
     
     private final AES aes;
     private final DAOxml xml;
     
-    public GestorAES(){
+    public AdapterAES(){
         aes = new AES();
         xml = new DAOxml();
     }
@@ -69,24 +69,6 @@ public class GestorAES implements IEncriptable {
     @Override
     public void setLlave(String llave){
         aes.setKey(llave);
-    }
-    
-    /**
-     * Obtiene del xml el texto encriptado de una página específica
-     * @param numeroPagina Número de página
-     * @return Texto encriptado en la página especificada
-     */
-    public String consultar(int numeroPagina){
-        return xml.consultar(numeroPagina);
-    }
-    
-    /**
-     * Obtiene el texto encriptado de la última página
-     * Utiliza los métodos: getLastIndex() y get(int i) 
-     * @return Texto encriptado de la última página
-     */
-    public String consultarUltimoTexto(){
-        return consultar(xml.getLastIndex());
     }
     
 }
