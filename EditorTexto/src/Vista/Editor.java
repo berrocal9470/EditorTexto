@@ -6,6 +6,7 @@
 package Vista;
 
 import Negocio.Controlador;
+import Negocio.Persistencia.DAOxml;
 import javax.swing.JOptionPane;
 
 /**
@@ -26,7 +27,7 @@ public class Editor extends javax.swing.JFrame {
     private final int ANCHO_PAGINA;
     
     private Controlador controlador;
-
+    private final DAOxml xml;   
     /**
      * Creates new form Editor
      */
@@ -40,10 +41,13 @@ public class Editor extends javax.swing.JFrame {
         ANCHO_PAGINA = scrllPagina.getWidth();
         
         controlador = new Controlador();
-        
+        xml = new DAOxml();
         //¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡QUITAR ESTA LLAVE!!!!!!!!!!!!!!!
         //(ahorita la dejo puesta por pereza de estarla escribiendo xD )
         txtLlave.setText("kWmHe8xIsDpfzK4d");
+        //Colocar numero de pag al iniciar programa
+        txtNumeroPagina.setText(String.valueOf(xml.getLastIndex()+1));
+        
     }
     
     //Sólo acepta llaves de 16 bytes (128 bits)
@@ -73,6 +77,24 @@ public class Editor extends javax.swing.JFrame {
             String resultado = controlador.desencriptar(llave, texto);
             txtPagina.setText(resultado);
         }
+    }
+    
+    //Indicador: decrementa(false) incrementa(true)
+    private void cambiarPagina(int numeroPag,boolean indicador){
+        txtPagina.setText("");
+        if(indicador) 
+            if(numeroPag < xml.getLastIndex())
+                numeroPag = numeroPag+1;
+            else
+                txtNumeroPagina.setText(String.valueOf(xml.getLastIndex()));
+        else{     
+            if(numeroPag!=1)
+                numeroPag = numeroPag-1;
+            else
+                txtNumeroPagina.setText(String.valueOf(1));
+        }
+        txtNumeroPagina.setText(String.valueOf(numeroPag));
+        txtPagina.setText(String.valueOf(controlador.consultar(numeroPag)));
     }
 
     /**
@@ -118,6 +140,11 @@ public class Editor extends javax.swing.JFrame {
         btnUltimaPagina.setPreferredSize(new java.awt.Dimension(59, 37));
         btnUltimaPagina.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
         btnUltimaPagina.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnUltimaPagina.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUltimaPaginaActionPerformed(evt);
+            }
+        });
 
         btnGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Vista/Iconos/icon-guardar.png"))); // NOI18N
         btnGuardar.setText("Guardar");
@@ -139,6 +166,11 @@ public class Editor extends javax.swing.JFrame {
         btnSalir.setPreferredSize(new java.awt.Dimension(59, 37));
         btnSalir.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
         btnSalir.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnSalir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSalirActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout pnlArchivoLayout = new javax.swing.GroupLayout(pnlArchivo);
         pnlArchivo.setLayout(pnlArchivoLayout);
@@ -176,8 +208,18 @@ public class Editor extends javax.swing.JFrame {
         pnlNavegacion.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         btnPaginaAnterior.setText("<");
+        btnPaginaAnterior.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPaginaAnteriorActionPerformed(evt);
+            }
+        });
 
         btnPaginaSiguiente.setText(">");
+        btnPaginaSiguiente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPaginaSiguienteActionPerformed(evt);
+            }
+        });
 
         btnDesencriptar.setText("Desencriptar");
         btnDesencriptar.addActionListener(new java.awt.event.ActionListener() {
@@ -285,6 +327,27 @@ public class Editor extends javax.swing.JFrame {
     private void btnDesencriptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDesencriptarActionPerformed
         desencriptar(txtLlave.getText(), txtPagina.getText());
     }//GEN-LAST:event_btnDesencriptarActionPerformed
+
+    private void btnPaginaAnteriorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPaginaAnteriorActionPerformed
+        cambiarPagina(Integer.parseInt(txtNumeroPagina.getText()),false);
+    }//GEN-LAST:event_btnPaginaAnteriorActionPerformed
+
+    private void btnPaginaSiguienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPaginaSiguienteActionPerformed
+        cambiarPagina(Integer.parseInt(txtNumeroPagina.getText()),true);
+    }//GEN-LAST:event_btnPaginaSiguienteActionPerformed
+
+    private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
+        // TODO add your handling code here:
+        encriptar(txtLlave.getText(), txtPagina.getText());
+        System.exit(0);
+    }//GEN-LAST:event_btnSalirActionPerformed
+
+    private void btnUltimaPaginaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUltimaPaginaActionPerformed
+        // TODO add your handling code here:
+        txtNumeroPagina.setText("");
+        txtPagina.setText("");
+        txtNumeroPagina.setText(String.valueOf(xml.getLastIndex()+1));
+    }//GEN-LAST:event_btnUltimaPaginaActionPerformed
 
     /**
      * @param args the command line arguments
